@@ -1,78 +1,80 @@
 package edu.iastate.cs228.hw2;
 
-import java.io.FileNotFoundException;
-import java.lang.NumberFormatException; 
-import java.lang.IllegalArgumentException; 
-import java.util.InputMismatchException;
-
-
 /**
- *  
- * @author
- *
- */
-
-/**
+ * This class implements the quicksort sorting algorithm.
  * 
- * This class implements the version of the quicksort algorithm presented in the lecture.   
- *
+ * @author Carter Snook
  */
-
-public class QuickSorter extends AbstractSorter
-{
-	
-	// Other private instance variables if you need ... 
-		
-	/** 
-	 * Constructor takes an array of points.  It invokes the superclass constructor, and also 
+public class QuickSorter extends AbstractSorter {
+	/**
+	 * Constructor takes an array of points. It invokes the superclass constructor,
+	 * and also
 	 * set the instance variables algorithm in the superclass.
-	 *   
-	 * @param pts   input array of integers
+	 * 
+	 * @param pts input array of integers
 	 */
-	public QuickSorter(Point[] pts)
-	{
-		// TODO 
+	public QuickSorter(Point[] pts) {
+		super(pts);
+		algorithm = "quicksort";
 	}
-		
 
 	/**
-	 * Carry out quicksort on the array points[] of the AbstractSorter class.  
-	 * 
+	 * Carry out quicksort on the array points[] of the AbstractSorter class.
 	 */
-	@Override 
-	public void sort()
-	{
-		// TODO 
+	@Override
+	public void sort() {
+		quickSortRec(0, points.length - 1);
 	}
-	
-	
-	/**
-	 * Operates on the subarray of points[] with indices between first and last. 
-	 * 
-	 * @param first  starting index of the subarray
-	 * @param last   ending index of the subarray
-	 */
-	private void quickSortRec(int first, int last)
-	{
-		// TODO
-	}
-	
-	
+
 	/**
 	 * Operates on the subarray of points[] with indices between first and last.
 	 * 
-	 * @param first
-	 * @param last
-	 * @return
+	 * @param start The start index.
+	 * @param end   The end index.
 	 */
-	private int partition(int first, int last)
-	{
-		// TODO 
-		return 0; 
-	}	
-		
+	private void quickSortRec(int start, int end) {
+		if (start >= end) {
+			return;
+		}
 
+		int determinant = partition(start, end);
+		quickSortRec(start, determinant);
+		quickSortRec(determinant + 1, end);
+	}
 
-	
-	// Other private methods if needed ...
+	/**
+	 * Operates on the subarray of points[] with indices between first and last.
+	 * 
+	 * @param start The start index.
+	 * @param end   The end index.
+	 * @return The determinant index.
+	 */
+	private int partition(int start, int end) {
+		// Pick middle element as pivot.
+		int midpoint = start + (end - start) / 2;
+		Point pivot = points[midpoint];
+
+		while (true) {
+			while (pointComparator.compare(points[start], pivot) < 0) {
+				start += 1;
+			}
+
+			while (pointComparator.compare(pivot, points[end]) < 0) {
+				end -= 1;
+			}
+
+			// If zero or one elements remain, then all numbers are partitioned.
+			if (start >= end) {
+				break;
+			}
+
+			// Swap numbers[start] and numbers[end]
+			swap(start, end);
+
+			// Update start and end
+			start += 1;
+			end -= 1;
+		}
+		return end;
+	}
 }
